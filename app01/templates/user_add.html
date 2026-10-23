@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+
+{% block title %}新建员工 - 联通用户管理系统{% endblock %}
+
+{% block css %}
+    <style>
+        .form-panel {
+            margin-top: 20px;
+        }
+        .panel-title-custom {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .error-text {
+            color: #a94442;
+            font-size: 12px;
+        }
+        .success-text {
+            color: #3c763d;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="panel panel-default form-panel">
+        <div class="panel-heading">
+            <span class="panel-title-custom">新建员工（ModelForm）</span>
+        </div>
+        <div class="panel-body">
+            {% if success %}
+                <div class="success-text">{{ success }}</div>
+            {% endif %}
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group {% if field.errors %}has-error{% endif %}">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% for error in field.errors %}
+                            <span class="error-text">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                <div style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-success">提 交</button>
+                    <a href="/depart/list/" class="btn btn-default" style="margin-left: 10px;">取 消</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

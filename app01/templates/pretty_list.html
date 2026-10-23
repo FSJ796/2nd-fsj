@@ -1,0 +1,81 @@
+{% extends 'layout.html' %}
+
+{% block title %}靓号管理 - 联通用户管理系统{% endblock %}
+
+{% block content %}
+    <div style="margin: 10px 0; display: flex; align-items: center; justify-content: space-between;">
+        <a href="/pretty/add/" class="btn btn-success">新建靓号</a>
+        <form method="get">
+            <div class="input-group" style="width: 320px;">
+                <input type="text" name="q" class="form-control" placeholder="搜索号码" value="{{ q }}">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">搜索</button>
+                </span>
+            </div>
+        </form>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">靓号列表</div>
+        <div class="panel-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>号码</th>
+                        <th>价格</th>
+                        <th>级别</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in queryset %}
+                    <tr>
+                        <td>{{ row.mobile }}</td>
+                        <td>{{ row.price }}</td>
+                        <td>{{ row.get_level_display }}</td>
+                        <td>{{ row.get_status_display }}</td>
+                        <td>
+                            <a href="/pretty/edit/{{ row.id }}/" class="btn btn-success btn-xs">编辑</a>
+                            <a href="/pretty/delete/{{ row.id }}/" class="btn btn-danger btn-xs">删除</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="text-align: center;">没有匹配的号码</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% if total_pages %}
+    <!-- 分页条：首页 / 上一页 / 页码 / 下一页 / 尾页 / 页码跳转 -->
+    <div style="margin-top: 10px;">
+        <ul class="pagination" style="display: inline-block; margin: 0; vertical-align: middle;">
+            <li><a href="?{{ prefix }}page=1">首页</a></li>
+            <!-- 上一页/下一页始终显示；prev_page/next_page 由视图算好边界（第1页点"上一页"仍停在第1页） -->
+            <li><a href="?{{ prefix }}page={{ prev_page }}">上一页</a></li>
+            {% for i in page_range %}
+                {% if i == current_page %}
+                <li class="active"><a href="?{{ prefix }}page={{ i }}">{{ i }}</a></li>
+                {% else %}
+                <li><a href="?{{ prefix }}page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+            <li><a href="?{{ prefix }}page={{ next_page }}">下一页</a></li>
+            <li><a href="?{{ prefix }}page={{ total_pages }}">尾页</a></li>
+        </ul>
+
+        <!-- 页码跳转：输入页码点"跳转"直达那一页（隐藏域把搜索词一起带上） -->
+        <form method="get" action="/pretty/list/" style="display: inline-block; vertical-align: middle; margin-left: 5px;">
+            {% if q %}<input type="hidden" name="q" value="{{ q }}">{% endif %}
+            <input type="text" name="page" placeholder="页码" class="form-control"
+                   style="display: inline-block; width: 70px; height: 32px; padding: 4px 8px; vertical-align: middle;">
+            <button type="submit" class="btn btn-default"
+                    style="height: 32px; padding: 4px 12px; vertical-align: middle;">跳转</button>
+        </form>
+    </div>
+    {% endif %}
+{% endblock %}

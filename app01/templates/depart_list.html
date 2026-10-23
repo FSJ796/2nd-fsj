@@ -1,0 +1,71 @@
+{% extends 'layout.html' %}
+
+{% block title %}部门列表 - 联通用户管理系统{% endblock %}
+
+{% block content %}
+    <div style="margin:10px 0;">
+        <a href="/depart/add/" class="btn btn-success">新建部门</a>
+        <a href="/user/add/" class="btn btn-success" style="margin-left: 10px;">ModelForm</a>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">部门列表</div>
+        <div class="panel-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>名称</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for depart in depart_list %}
+                    <tr>
+                        <td>{{ depart.id }}</td>
+                        <td>{{ depart.title }}</td>
+                        <td>
+                            <a href="/depart/edit/{{ depart.id }}/" class="btn btn-primary btn-xs">编辑</a>
+                            <a href="/depart/delete/{{ depart.id }}/" class="btn btn-danger btn-xs" onclick="return confirm('确定删除吗？')">删除</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="panel panel-default" style="margin-top: 20px;">
+        <div class="panel-heading">员工信息</div>
+        <div class="panel-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>姓名</th>
+                        <th>密码</th>
+                        <th>年龄</th>
+                        <th>账户余额</th>
+                        <th>入职时间</th>
+                        <th>性别</th>
+                        <th>部门</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in user_data %}
+                    <tr>
+                        <td>{{ row.id }}</td>
+                        <td>{{ row.name }}</td>
+                        <td>{{ row.password }}</td>
+                        <td>{{ row.age }}</td>
+                        <td>{{ row.account }}</td>
+                        <td>{{ row.create_time|date:"Y-m-d" }}</td>
+                        <td>{{ row.get_gender_display }}</td>
+                        <td>{{ row.depart.title }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

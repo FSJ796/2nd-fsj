@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+
+{% block title %}新建部门 - 联通用户管理系统{% endblock %}
+
+{% block css %}
+    <style>
+        .form-panel {
+            margin-top: 20px;
+        }
+        .panel-title-custom {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .error-text {
+            color: #a94442;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .has-error .form-control {
+            border-color: #a94442;
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="panel panel-default form-panel">
+        <div class="panel-heading">
+            <span class="panel-title-custom">新建部门</span>
+        </div>
+        <div class="panel-body">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <div class="form-group {% if errors.title %}has-error{% endif %}">
+                    <label for="id_title">标题 <span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" id="id_title" name="title"
+                           placeholder="请输入标题" maxlength="32"
+                           value="{{ title|default:'' }}">
+                    {% if errors.title %}
+                        <span class="error-text">{{ errors.title }}</span>
+                    {% endif %}
+                </div>
+                <div style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-success">提 交</button>
+                    <a href="/depart/list/" class="btn btn-default" style="margin-left: 10px;">取 消</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
